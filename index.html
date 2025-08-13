@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ian Carter Kulani Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-red: #dc2626;
+            --dark-red: #991b1b;
+            --light-red: #fee2e2;
+            --accent-red: #ef4444;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --white: #ffffff;
+            --black: #000000;
+            --gradient-red: linear-gradient(135deg, #dc2626, #991b1b);
+            --shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-red);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Navigation Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(31, 41, 55, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .navbar.scrolled {
+            background: rgba(31, 41, 55, 0.98);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: var(--accent-red);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .nav-item a:hover,
+        .nav-item a.active {
+            color: var(--primary-red);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        .nav-item a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-red);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-item a:hover::after,
+        .nav-item a.active::after {
+            width: 80%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--white);
+            margin: 3px 0;
+            transition: var(--transition);
+        }
+
+        /* Welcome Section Styles */
+        .welcome-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .welcome-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-red);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.7s both;
+        }
+
+        .welcome-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.9s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--gradient-red);
+            color: var(--white);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            animation: fadeInUp 1s ease 1.1s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Rubik's Cube Styles */
+        .cube-container {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            perspective: 1000px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-60%) translateX(10px); }
+        }
+
+        .cube {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 10s linear infinite;
+        }
+
+        @keyframes rotateCube {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            33% { transform: rotateX(90deg) rotateY(180deg) rotateZ(0deg); }
+            66% { transform: rotateX(180deg) rotateY(270deg) rotateZ(90deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); }
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            padding: 2px;
+        }
+
+        .cube-face.front { transform: rotateY(0deg) translateZ(60px); }
+        .cube-face.back { transform: rotateY(180deg) translateZ(60px); }
+        .cube-face.right { transform: rotateY(90deg) translateZ(60px); }
+        .cube-face.left { transform: rotateY(-90deg) translateZ(60px); }
+        .cube-face.top { transform: rotateX(90deg) translateZ(60px); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(60px); }
+
+        .cube-square {
+            background: var(--primary-red);
+            border-radius: 2px;
+            animation: colorShift 3s ease-in-out infinite;
+        }
+
+        @keyframes colorShift {
+            0%, 100% { background: var(--primary-red); }
+            25% { background: #fbbf24; }
+            50% { background: #10b981; }
+            75% { background: #3b82f6; }
+        }
+
+        /* Section Styles */
+        .section {
+            min-height: 100vh;
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--gradient-red);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About Section Styles */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .profile-image-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 4px solid var(--primary-red);
+            transition: var(--transition);
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(220, 38, 38, 0.4);
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+
+        .about-text h3 {
+            color: var(--primary-red);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            transition: var(--transition);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            background: rgba(220, 38, 38, 0.1);
+            border-color: var(--primary-red);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+        }
+
+        .skill-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-description {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Projects Section Styles */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-red);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: var(--gradient-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--white);
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-red);
+        }
+
+        .project-description {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tag {
+            background: rgba(220, 38, 38, 0.2);
+            color: var(--primary-red);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            color: var(--primary-red);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-link:hover {
+            color: var(--accent-red);
+            transform: translateX(5px);
+        }
+
+        /* Contact Section Styles */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--white);
+        }
+
+        .contact-details h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-details p {
+            color: var(--text-light);
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-red);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-red);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Social Media Styles */
+        .social-section {
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .social-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: var(--primary-red);
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--white);
+            padding: 2rem 1rem;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            transform: translateY(-10px);
+            background: rgba(220, 38, 38, 0.1);
+            border-color: var(--primary-red);
+            box-shadow: var(--shadow);
+        }
+
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-red);
+        }
+
+        .social-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3rem 0;
+            border-top: 1px solid rgba(220, 38, 38, 0.3);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: var(--primary-red);
+        }
+
+        .footer-text {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .footer-copyright {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .welcome-title {
+                font-size: 3rem;
+            }
+
+            .cube-container {
+                display: none;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .social-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(31, 41, 55, 0.98);
+                padding: 1rem 0;
+                box-shadow: var(--shadow);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+
+            .welcome-title {
+                font-size: 2.5rem;
+            }
+
+            .welcome-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .contact-info,
+            .contact-form {
+                padding: 2rem;
+            }
+
+            .social-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Particle Background */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary-red);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float-particle 10s linear infinite;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--text-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-red);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-red);
+        }
+
+        /* Additional Utility Classes */
+        .text-gradient {
+            background: var(--gradient-red);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-red);
+            background: transparent;
+            color: var(--primary-red);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-red);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .section-dark {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <div class="loading-text">Loading Portfolio...</div>
+    </div>
+
+    <!-- Particle Background -->
+    <div class="particles-container" id="particlesContainer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">Ian Carter Kulani</a>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Welcome Section -->
+    <section id="home" class="welcome-section">
+        <div class="welcome-content">
+            <h1 class="welcome-title">Ian Carter Kulani</h1>
+            <p class="welcome-subtitle">Full Stack Developer & Cybersecurity Expert</p>
+            <p class="welcome-description">
+               Passionate about building a safer, smarter, and greener digital world. I combine expertise in cybersecurity with a commitment to green computing, creating secure, energy-
+               efficient solutions that protect people and the planet.
+            </p>
+            <a href="#about" class="cta-button">Discover My Work</a>
+        </div>
+        
+        <!-- Rotating Rubik's Cube -->
+        <div class="cube-container">
+            <div class="cube">
+                <div class="cube-face front">
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                </div>
+                <div class="cube-face back">
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                </div>
+                <div class="cube-face right">
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                </div>
+                <div class="cube-face left">
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                </div>
+                <div class="cube-face top">
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                </div>
+                <div class="cube-face bottom">
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                    <div class="cube-square"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section section-dark">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">About Me</h2>
+            <p class="section-subtitle animate-on-scroll">
+                Driven by curiosity and powered by creativity, I transform ideas into digital realities.
+            </p>
+            
+            <div class="about-content animate-on-scroll">
+                <div class="profile-image-container">
+                    <img src="Blogg1.jpg" alt="Ian Carter Kulani" class="profile-image" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="width: 100%; height: 400px; background: var(--gradient-red); border-radius: 20px; 
+                                display: none; align-items: center; justify-content: center; font-size: 3rem; color: white;
+                                box-shadow: var(--shadow); border: 4px solid var(--primary-red);">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                
+                <div class="about-text">
+                    <h3>Hello, I'm Ian Carter Kulani</h3>
+                    <p>
+                       A passionate Cybersecurity Specialist & Full Stack Developer with over 10+ years of experience designing secure, high-performance web and mobile applications. I          
+                       specialize in penetration testing, threat analysis, and cyber drill simulations to strengthen organizational defenses. Leveraging modern JavaScript frameworks, cloud         
+                       security solutions, and advanced encryption practices, I create systems that are not only functional but also resilient against evolving cyber threats.
+                    </p>
+
+                    <p>
+                        My journey began with a Computer Science degree, but my real education came from countless hours of building, breaking, and rebuilding applications to push the   
+                        limits of what’s possible. I’ve enhanced my expertise with certifications like CompTIA Security+ and specialized training from ITU, equipping me with advanced  
+                        skills in cybersecurity, penetration testing, and network defense. Currently, I’m pursuing a Master’s degree in Computer Science at the University of East London,  
+                        further deepening my knowledge in cutting-edge technologies. I believe in crafting clean, efficient code that not only works flawlessly but also tells a story of 
+                        innovation, security, and impact.
+                    </p>
+                    <p>
+                       When I’m not hardening networks or crafting secure applications, you’ll find me exploring emerging technologies, contributing to open-source security tools, or 
+                       mentoring aspiring developers. Outside the digital battlefield, I enjoy playing basketball, diving into immersive video games, and tackling new challenges—always 
+                       ready to collaborate on innovative and impactful projects..
+                    </p>
+                    <div style="margin-top: 2rem;">
+                        <a href="#contact" class="btn-outline">Let's Work Together</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-grid animate-on-scroll">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fab fa-js-square"></i>
+                    </div>
+                    <h4 class="skill-title">Frontend Development</h4>
+                    <p class="skill-description">
+                        Expert in React, Vue.js, Angular, and vanilla JavaScript. Creating responsive, 
+                        interactive user interfaces with modern CSS frameworks and animation libraries.
+                    </p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h4 class="skill-title">Backend Development</h4>
+                    <p class="skill-description">
+                        Proficient in Node.js, Python, PHP, and database management. Building scalable 
+                        APIs, microservices, and server-side applications with robust architecture.
+                    </p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h4 class="skill-title">Mobile Development</h4>
+                    <p class="skill-description">
+                        React Native and Flutter expertise for cross-platform mobile applications. 
+                        Creating native iOS and Android experiences with smooth performance.
+                    </p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h4 class="skill-title">Cloud & DevOps</h4>
+                    <p class="skill-description">
+                        AWS, Google Cloud, and Azure experience. Docker containerization, CI/CD 
+                        pipelines, and automated deployment strategies for scalable applications.
+                    </p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h4 class="skill-title">UI/UX Design</h4>
+                    <p class="skill-description">
+                        User-centered design principles with Figma, Adobe XD, and Sketch. Creating 
+                        intuitive interfaces that balance aesthetics with functionality.
+                    </p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h4 class="skill-title">Database Management</h4>
+                    <p class="skill-description">
+                        MySQL, PostgreSQL, MongoDB, and Redis expertise. Designing efficient database 
+                        schemas and optimizing queries for high-performance applications.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Featured Projects</h2>
+            <p class="section-subtitle animate-on-scroll">
+                A showcase of my recent work spanning web applications, mobile apps, and creative experiments.
+            </p>
+            
+            <div class="projects-grid animate-on-scroll">
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Network Intrusion Monitoring Tool shop now</h3>
+                        <p class="project-description">
+                            Network-Intrusion-Monitoring-Tool is a lightweight yet powerful solution designed to detect, monitor, 
+                            and analyze suspicious activities within a network in real time.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">React</span>
+                            <span class="project-tag">Node.js</span>
+                            <span class="project-tag">MongoDB</span>
+                            <span class="project-tag">Stripe</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Iankulani/network-intrusion-monitoring-tool" class="project-link">
+                                <i class="fab fa-github"></i> Source Code
+                            </a>
+                            <a href="#" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Accurate Cyber Defense Advanced Bot</h3>
+                        <p class="project-description">
+                            Accurate_Cyber_Defense_Advanced_Bot is a next-generation cybersecurity solution designed to 
+                            provide comprehensive protection against modern digital threats.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">Vue.js</span>
+                            <span class="project-tag">D3.js</span>
+                            <span class="project-tag">WebSocket</span>
+                            <span class="project-tag">Python</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Iankulani/Accurate_Cyber_Defense_Advanced_Bot" class="project-link">
+                                <i class="fab fa-github"></i> Source Code
+                            </a>
+                            <a href="#" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Accurate Cyber Box Alpha</h3>
+                        <p class="project-description">
+                            Accurate-Cyber-Box, an advanced, MCP-server-integrated cybersecurity tool built specifically for penetration testing and cyber drills.
+                            It empowers cybersecurity teams to not only detect and patch vulnerabilities but also train in real-world cyber-attack scenarios, test organizational response             
+                            times, and develop resilience strategies.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">React Native</span>
+                            <span class="project-tag">Firebase</span>
+                            <span class="project-tag">Redux</span>
+                            <span class="project-tag">Expo</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Iankulani/Accurate-Cyber-Box-Alpha" class="project-link">
+                                <i class="fab fa-github"></i> Source Code
+                            </a>
+                            <a href="#" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Accurate Cyber Defense DNS Exploitation Bot</h3>
+                        <p class="project-description">
+                            Accurate Cyber Defense DNS Exploitation Bot is an advanced, real-world operational cybersecurity 
+                            utility developed to assess, exploit, and analyze Domain Name System (DNS) traffic in live environments. 
+                            This tool is not a simulator. It performs active DNS-based exploitation techniques, traffic manipulation, 
+                            and network reconnaissance on real-world infrastructures
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">Python</span>
+                            <span class="project-tag">Flask</span>
+                            <span class="project-tag">OpenAI</span>
+                            <span class="project-tag">React</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Iankulani/accurate-cyber-defense-dns-exploitation-tool" class="project-link">
+                                <i class="fab fa-github"></i> Source Code
+                            </a>
+                            <a href="https://github.com/Iankulani/accurate-cyber-defense-dns-exploitation-tool" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">3D Web Game</h3>
+                        <p class="project-description">
+                            Interactive 3D web game built with Three.js featuring physics simulation, 
+                            particle effects, and responsive controls. Optimized for both desktop 
+                            and mobile browsers.
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">Three.js</span>
+                            <span class="project-tag">WebGL</span>
+                            <span class="project-tag">JavaScript</span>
+                            <span class="project-tag">GSAP</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Iankulani/3D-Web-Games" class="project-link">
+                                <i class="fab fa-github"></i> Source Code
+                            </a>
+                            <a href="https://github.com/Iankulani/3D-Web-Games" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">International Telecommunication Union Cyber Drill Tools</h3>
+                        <p class="project-description">
+                            This repository contains the official Cyber Drill Penetration Testing Toolkit developed for international cyber capacity-building exercises led by the                  
+                            International Telecommunication Union (ITU).
+
+
+                            Designed to simulate real-world cyber attack scenarios, this toolkit enables national Computer Emergency Response Teams (CERTs), Critical Infrastructure 
+                            Operators, and other stakeholders to assess, test, and improve their incident response and system defense capabilities
+                        </p>
+                        <div class="project-tags">
+                            <span class="project-tag">TypeScript</span>
+                            <span class="project-tag">VS Code API</span>
+                            <span class="project-tag">Node.js</span>
+                            <span class="project-tag">JSON</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Iankulani/International-Telecommunication-Union-Cyber-Drill-Penetration-Testing-Tool" class="project-link">
+                                <i class="fab fa-github"></i> Source Code
+                            </a>
+                            <a href="#" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Marketplace
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section section-dark">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Get In Touch</h2>
+            <p class="section-subtitle animate-on-scroll">
+                Ready to bring your ideas to life? Let's collaborate on something amazing.
+            </p>
+            
+            <div class="contact-content animate-on-scroll">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Location</h4>
+                            <p>Lilongwe, Central Region, Malawi</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p>iancarterkulani@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Phone</h4>
+                            <p>+265 988061969</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Availability</h4>
+                            <p>Monday - Friday, 9AM - 6PM</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-button">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Media Section -->
+    <section class="social-section">
+        <div class="container">
+            <h2 class="social-title animate-on-scroll">Connect With Me</h2>
+            <div class="social-grid animate-on-scroll">
+                <a href="https://web.facebook.com/ian.carter.96155" class="social-link" target="_blank">
+                    <i class="fab fa-facebook social-icon"></i>
+                    <span class="social-name">Facebook</span>
+                </a>
+                
+                <a href="https://t.me/Iankulani" class="social-link" target="_blank">
+                    <i class="fab fa-telegram social-icon"></i>
+                    <span class="social-name">Telegram</span>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/ian-carter-kulani-913679255/" class="social-link" target="_blank">
+                    <i class="fab fa-linkedin social-icon"></i>
+                    <span class="social-name">LinkedIn</span>
+                </a>
+                
+                <a href="https://x.com/Iankulani" class="social-link" target="_blank">
+                    <i class="fab fa-x-twitter social-icon"></i>
+                    <span class="social-name">X (Twitter)</span>
+                </a>
+                
+                <a href="https://www.twitch.tv/iankulani" class="social-link" target="_blank">
+                    <i class="fab fa-twitch social-icon"></i>
+                    <span class="social-name">Twitch</span>
+                </a>
+                
+                <a href="https://discord.com/channels/@iankulani_22174" class="social-link" target="_blank">
+                    <i class="fab fa-discord social-icon"></i>
+                    <span class="social-name">Discord</span>
+                </a>
+                
+                <a href="https://github.com/iankulani" class="social-link" target="_blank">
+                    <i class="fab fa-github social-icon"></i>
+                    <span class="social-name">GitHub</span>
+                </a>
+                
+                <a href="https://wa.me/265988061969" class="social-link" target="_blank">
+                    <i class="fab fa-whatsapp social-icon"></i>
+                    <span class="social-name">WhatsApp</span>
+                </a>
+                
+                <a href="https://www.reddit.com/user/FunCorner4541" class="social-link" target="_blank">
+                    <i class="fab fa-reddit social-icon"></i>
+                    <span class="social-name">Reddit</span>
+                </a>
+                
+                <a href="https://www.instagram.com/iankulani/" class="social-link" target="_blank">
+                    <i class="fab fa-instagram social-icon"></i>
+                    <span class="social-name">Instagram</span>
+                </a>
+                
+                <a href="https://youtube.com/@iancarterkulani" class="social-link" target="_blank">
+                    <i class="fab fa-youtube social-icon"></i>
+                    <span class="social-name">YouTube</span>
+                </a>
+                
+                <a href="https://www.tiktok.com/@iancarterkulani?lang=en" class="social-link" target="_blank">
+                    <i class="fab fa-tiktok social-icon"></i>
+                    <span class="social-name">TikTok</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#home" class="footer-link">Home</a>
+                <a href="#about" class="footer-link">About</a>
+                <a href="#projects" class="footer-link">Projects</a>
+                <a href="#contact" class="footer-link">Contact</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+            </div>
+            <p class="footer-text">
+                Crafting digital experiences with passion and precision.
+            </p>
+            <p class="footer-copyright">
+                © 2063 Ian Carter Kulani. All rights reserved. Made with ❤️ in Malawi.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Global Variables
+        let isScrolling = false;
+        let particleCount = 50;
+        let particles = [];
+        
+        // Loading Screen
+        function hideLoadingScreen() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.classList.add('hidden');
+            
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                initializeParticles();
+                animateOnScroll();
+            }, 1000);
+        }
+
+        // Initialize particles
+        function initializeParticles() {
+            const container = document.getElementById('particlesContainer');
+            
+            for (let i = 0; i < particleCount; i++) {
+                createParticle(container);
+            }
+        }
+
+        function createParticle(container) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 3 + 1;
+            const startPosition = Math.random() * window.innerWidth;
+            const animationDuration = Math.random() * 20 + 10;
+            const delay = Math.random() * 5;
+            
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = startPosition + 'px';
+            particle.style.animationDuration = animationDuration + 's';
+            particle.style.animationDelay = delay + 's';
+            
+            container.appendChild(particle);
+            particles.push(particle);
+        }
+
+        // Navigation functionality
+        function initializeNavigation() {
+            const navbar = document.getElementById('navbar');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+            let lastScrollTop = 0;
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                if (isScrolling) return;
+                
+                isScrolling = true;
+                requestAnimationFrame(() => {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (scrollTop > 100) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                    
+                    // Update active nav link
+                    updateActiveNavLink();
+                    
+                    isScrolling = false;
+                    lastScrollTop = scrollTop;
+                });
+            });
+
+            // Mobile menu toggle
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            // Nav link clicks
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 80;
+                        
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Close mobile menu
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        function updateActiveNavLink() {
+            const sections = document.querySelectorAll('.section, .welcome-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.clientHeight;
+                
+                if (window.pageYOffset >= sectionTop && 
+                    window.pageYOffset < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Smooth scrolling animation on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        }
+
+        // Contact form functionality
+        function initializeContactForm() {
+            const contactForm = document.getElementById('contactForm');
+            
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const submitButton = contactForm.querySelector('.submit-button');
+                const originalText = submitButton.innerHTML;
+                
+                // Simulate form submission
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitButton.disabled = true;
+                
+                setTimeout(() => {
+                    submitButton.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                    submitButton.style.background = '#10b981';
+                    
+                    // Reset form
+                    contactForm.reset();
+                    
+                    setTimeout(() => {
+                        submitButton.innerHTML = originalText;
+                        submitButton.disabled = false;
+                        submitButton.style.background = '';
+                    }, 3000);
+                }, 2000);
+            });
+        }
+
+        // Cube interaction
+        function initializeCubeInteraction() {
+            const cube = document.querySelector('.cube');
+            let isHovering = false;
+            
+            if (cube) {
+                cube.addEventListener('mouseenter', () => {
+                    isHovering = true;
+                    cube.style.animationPlayState = 'paused';
+                });
+                
+                cube.addEventListener('mouseleave', () => {
+                    isHovering = false;
+                    cube.style.animationPlayState = 'running';
+                });
+                
+                // Manual rotation on click
+                cube.addEventListener('click', () => {
+                    if (!isHovering) return;
+                    
+                    const currentTransform = cube.style.transform || '';
+                    const randomX = Math.random() * 360;
+                    const randomY = Math.random() * 360;
+                    const randomZ = Math.random() * 360;
+                    
+                    cube.style.transition = 'transform 1s ease';
+                    cube.style.transform = `rotateX(${randomX}deg) rotateY(${randomY}deg) rotateZ(${randomZ}deg)`;
+                    
+                    setTimeout(() => {
+                        cube.style.transition = '';
+                    }, 1000);
+                });
+            }
+        }
+
+        // Social media link tracking
+        function initializeSocialTracking() {
+            const socialLinks = document.querySelectorAll('.social-link');
+            
+            socialLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const platform = link.querySelector('.social-name').textContent;
+                    
+                    // Add click effect
+                    link.style.transform = 'scale(0.95)';
+                    
+                    setTimeout(() => {
+                        link.style.transform = '';
+                    }, 150);
+                    
+                    // Console log for analytics (replace with actual tracking)
+                    console.log(`Social media click: ${platform}`);
+                });
+            });
+        }
+
+        // Keyboard navigation
+        function initializeKeyboardNavigation() {
+            document.addEventListener('keydown', (e) => {
+                // ESC key closes mobile menu
+                if (e.key === 'Escape') {
+                    const hamburger = document.getElementById('hamburger');
+                    const navMenu = document.getElementById('navMenu');
+                    
+                    if (navMenu.classList.contains('active')) {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                }
+                
+                // Arrow keys for section navigation
+                if (e.key === 'ArrowDown' && e.ctrlKey) {
+                    e.preventDefault();
+                    navigateToNextSection();
+                } else if (e.key === 'ArrowUp' && e.ctrlKey) {
+                    e.preventDefault();
+                    navigateToPrevSection();
+                }
+            });
+        }
+
+        function navigateToNextSection() {
+            const sections = ['#home', '#about', '#projects', '#contact'];
+            const currentSection = getCurrentSection();
+            const currentIndex = sections.indexOf(currentSection);
+            const nextIndex = (currentIndex + 1) % sections.length;
+            
+            const targetSection = document.querySelector(sections[nextIndex]);
+            if (targetSection) {
+                const offsetTop = targetSection.offsetTop - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function navigateToPrevSection() {
+            const sections = ['#home', '#about', '#projects', '#contact'];
+            const currentSection = getCurrentSection();
+            const currentIndex = sections.indexOf(currentSection);
+            const prevIndex = currentIndex > 0 ? currentIndex - 1 : sections.length - 1;
+            
+            const targetSection = document.querySelector(sections[prevIndex]);
+            if (targetSection) {
+                const offsetTop = targetSection.offsetTop - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function getCurrentSection() {
+            const sections = document.querySelectorAll('.section, .welcome-section');
+            let current = '#home';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.clientHeight;
+                
+                if (window.pageYOffset >= sectionTop && 
+                    window.pageYOffset < sectionTop + sectionHeight) {
+                    current = '#' + section.getAttribute('id');
+                }
+            });
+
+            return current;
+        }
+
+        // Parallax scrolling effects
+        function initializeParallaxEffects() {
+            window.addEventListener('scroll', () => {
+                if (isScrolling) return;
+                
+                const scrollTop = window.pageYOffset;
+                const cubeContainer = document.querySelector('.cube-container');
+                const profileImage = document.querySelector('.profile-image');
+                
+                if (cubeContainer && window.innerWidth > 1024) {
+                    const parallaxSpeed = 0.5;
+                    const yPos = scrollTop * parallaxSpeed;
+                    cubeContainer.style.transform = `translateY(calc(-50% + ${yPos}px))`;
+                }
+                
+                if (profileImage) {
+                    const parallaxSpeed = 0.3;
+                    const yPos = scrollTop * parallaxSpeed;
+                    profileImage.style.transform = `translateY(${yPos}px)`;
+                }
+            });
+        }
+
+        // Dynamic typing effect for welcome text
+        function initializeTypingEffect() {
+            const titles = [
+                'Full Stack Developer',
+                'Creative Technologist',
+                'UI/UX Designer',
+                'Mobile App Developer',
+                'Cloud Solutions Architect'
+            ];
+            
+            let currentTitleIndex = 0;
+            let currentCharIndex = 0;
+            let isDeleting = false;
+            const subtitleElement = document.querySelector('.welcome-subtitle');
+            const typingSpeed = 100;
+            const deletingSpeed = 50;
+            const pauseTime = 2000;
+            
+            function typeText() {
+                const currentTitle = titles[currentTitleIndex];
+                
+                if (isDeleting) {
+                    subtitleElement.textContent = currentTitle.substring(0, currentCharIndex - 1);
+                    currentCharIndex--;
+                } else {
+                    subtitleElement.textContent = currentTitle.substring(0, currentCharIndex + 1);
+                    currentCharIndex++;
+                }
+                
+                let typeSpeed = isDeleting ? deletingSpeed : typingSpeed;
+                
+                if (!isDeleting && currentCharIndex === currentTitle.length) {
+                    typeSpeed = pauseTime;
+                    isDeleting = true;
+                } else if (isDeleting && currentCharIndex === 0) {
+                    isDeleting = false;
+                    currentTitleIndex = (currentTitleIndex + 1) % titles.length;
+                    typeSpeed = typingSpeed;
+                }
+                
+                setTimeout(typeText, typeSpeed);
+            }
+            
+            // Start typing effect after loading screen
+            setTimeout(typeText, 2000);
+        }
+
+        // Scroll progress indicator
+        function initializeScrollProgress() {
+            const progressBar = document.createElement('div');
+            progressBar.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 0%;
+                height: 3px;
+                background: linear-gradient(90deg, #dc2626, #ef4444);
+                z-index: 10001;
+                transition: width 0.3s ease;
+            `;
+            document.body.appendChild(progressBar);
+            
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                
+                progressBar.style.width = scrollPercent + '%';
+            });
+        }
+
+        // Theme toggle functionality
+        function initializeThemeToggle() {
+            const themeToggle = document.createElement('button');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            themeToggle.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: var(--gradient-red);
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                z-index: 1000;
+                transition: all 0.3s ease;
+                box-shadow: var(--shadow);
+            `;
+            
+            themeToggle.addEventListener('mouseenter', () => {
+                themeToggle.style.transform = 'scale(1.1)';
+            });
+            
+            themeToggle.addEventListener('mouseleave', () => {
+                themeToggle.style.transform = 'scale(1)';
+            });
+            
+            let isDarkMode = true;
+            
+            themeToggle.addEventListener('click', () => {
+                isDarkMode = !isDarkMode;
+                
+                if (isDarkMode) {
+                    document.body.style.background = 'linear-gradient(135deg, #1f2937 0%, #111827 100%)';
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    document.body.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)';
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    document.documentElement.style.setProperty('--white', '#1f2937');
+                    document.documentElement.style.setProperty('--text-light', '#374151');
+                }
+            });
+            
+            document.body.appendChild(themeToggle);
+        }
+
+        // Image lazy loading
+        function initializeLazyLoading() {
+            const images = document.querySelectorAll('img[data-src]');
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            images.forEach(img => imageObserver.observe(img));
+        }
+
+        // Performance monitoring
+        function initializePerformanceMonitoring() {
+            // Monitor page load performance
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const perfData = performance.getEntriesByType('navigation')[0];
+                    const loadTime = perfData.loadEventEnd - perfData.loadEventStart;
+                    
+                    console.log(`Page loaded in ${loadTime}ms`);
+                    
+                    // Show performance notification if slow
+                    if (loadTime > 3000) {
+                        showNotification('Page loaded slowly. Consider optimizing for better performance.', 'warning');
+                    }
+                }, 100);
+            });
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${type === 'warning' ? '#f59e0b' : '#10b981'};
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                z-index: 10000;
+                max-width: 300px;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 5000);
+        }
+
+        // Easter egg functionality
+        function initializeEasterEggs() {
+            let konamiCode = [];
+            const konamiSequence = [
+                'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+                'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+                'KeyB', 'KeyA'
+            ];
+            
+            document.addEventListener('keydown', (e) => {
+                konamiCode.push(e.code);
+                konamiCode = konamiCode.slice(-konamiSequence.length);
+                
+                if (konamiCode.join(',') === konamiSequence.join(',')) {
+                    triggerEasterEgg();
+                    konamiCode = [];
+                }
+            });
+            
+            // Click easter egg on logo
+            let logoClickCount = 0;
+            const logo = document.querySelector('.logo');
+            
+            logo.addEventListener('click', (e) => {
+                e.preventDefault();
+                logoClickCount++;
+                
+                if (logoClickCount >= 7) {
+                    triggerEasterEgg();
+                    logoClickCount = 0;
+                }
+                
+                // Reset counter after 3 seconds
+                setTimeout(() => {
+                    logoClickCount = 0;
+                }, 3000);
+            });
+        }
+
+        function triggerEasterEgg() {
+            // Create rainbow effect
+            const elements = document.querySelectorAll('*');
+            let hue = 0;
+            
+            const rainbowEffect = setInterval(() => {
+                elements.forEach((el, index) => {
+                    if (Math.random() > 0.95) {
+                        el.style.filter = `hue-rotate(${(hue + index * 10) % 360}deg)`;
+                    }
+                });
+                hue += 10;
+            }, 100);
+            
+            // Show special message
+            showNotification('🎉 You found the easter egg! Enjoy the rainbow!', 'info');
+            
+            // Stop after 10 seconds
+            setTimeout(() => {
+                clearInterval(rainbowEffect);
+                elements.forEach(el => {
+                    el.style.filter = '';
+                });
+                showNotification('Rainbow mode disabled!', 'info');
+            }, 10000);
+        }
+
+        // Advanced cube interactions
+        function initializeAdvancedCubeEffects() {
+            const cube = document.querySelector('.cube');
+            const cubeSquares = document.querySelectorAll('.cube-square');
+            
+            if (cube) {
+                // Mouse tracking for 3D effect
+                document.addEventListener('mousemove', (e) => {
+                    if (window.innerWidth <= 1024) return;
+                    
+                    const mouseX = e.clientX / window.innerWidth - 0.5;
+                    const mouseY = e.clientY / window.innerHeight - 0.5;
+                    
+                    const rotateX = mouseY * 20;
+                    const rotateY = mouseX * 20;
+                    
+                    cube.style.transform += ` rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                
+                // Random color changes
+                setInterval(() => {
+                    cubeSquares.forEach(square => {
+                        if (Math.random() > 0.8) {
+                            const colors = ['#dc2626', '#fbbf24', '#10b981', '#3b82f6', '#8b5cf6', '#ef4444'];
+                            square.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        }
+                    });
+                }, 2000);
+            }
+        }
+
+        // Advanced form validation
+        function initializeAdvancedFormValidation() {
+            const form = document.getElementById('contactForm');
+            const inputs = form.querySelectorAll('input, textarea');
+            
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => {
+                    validateInput(input);
+                });
+                
+                input.addEventListener('input', () => {
+                    if (input.classList.contains('error')) {
+                        validateInput(input);
+                    }
+                });
+            });
+            
+            function validateInput(input) {
+                const value = input.value.trim();
+                let isValid = true;
+                let errorMessage = '';
+                
+                // Required field validation
+                if (input.hasAttribute('required') && !value) {
+                    isValid = false;
+                    errorMessage = 'This field is required';
+                }
+                
+                // Email validation
+                if (input.type === 'email' && value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid email address';
+                    }
+                }
+                
+                // Name validation
+                if (input.name === 'name' && value) {
+                    if (value.length < 2) {
+                        isValid = false;
+                        errorMessage = 'Name must be at least 2 characters long';
+                    }
+                }
+                
+                // Message validation
+                if (input.name === 'message' && value) {
+                    if (value.length < 10) {
+                        isValid = false;
+                        errorMessage = 'Message must be at least 10 characters long';
+                    }
+                }
+                
+                // Remove existing error message
+                const existingError = input.parentNode.querySelector('.error-message');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                if (isValid) {
+                    input.classList.remove('error');
+                    input.classList.add('valid');
+                } else {
+                    input.classList.remove('valid');
+                    input.classList.add('error');
+                    
+                    const errorElement = document.createElement('span');
+                    errorElement.className = 'error-message';
+                    errorElement.textContent = errorMessage;
+                    errorElement.style.cssText = `
+                        color: #ef4444;
+                        font-size: 0.9rem;
+                        margin-top: 0.5rem;
+                        display: block;
+                    `;
+                    
+                    input.parentNode.appendChild(errorElement);
+                }
+                
+                return isValid;
+            }
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize all functionality
+            setTimeout(() => {
+                hideLoadingScreen();
+                initializeNavigation();
+                initializeContactForm();
+                initializeCubeInteraction();
+                initializeSocialTracking();
+                initializeKeyboardNavigation();
+                initializeParallaxEffects();
+                initializeTypingEffect();
+                initializeScrollProgress();
+                initializeThemeToggle();
+                initializeLazyLoading();
+                initializePerformanceMonitoring();
+                initializeEasterEggs();
+                initializeAdvancedCubeEffects();
+                initializeAdvancedFormValidation();
+            }, 1500);
+            
+            // Add additional CSS for form validation
+            const style = document.createElement('style');
+            style.textContent = `
+                .form-group input.error,
+                .form-group textarea.error {
+                    border-color: #ef4444;
+                    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+                }
+                
+                .form-group input.valid,
+                .form-group textarea.valid {
+                    border-color: #10b981;
+                    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Service Worker for offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swScript = `
+                    const CACHE_NAME = 'ian-portfolio-v1';
+                    const urlsToCache = [
+                        '/',
+                        '/profile.jpg'
+                    ];
+
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then((cache) => cache.addAll(urlsToCache))
+                        );
+                    });
+
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then((response) => {
+                                    if (response) {
+                                        return response;
+                                    }
+                                    return fetch(event.request);
+                                })
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swScript], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then((registration) => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker registration failed');
+                    });
+            });
+        }
+
+        // Analytics tracking simulation
+        function trackEvent(eventName, data = {}) {
+            console.log(`Analytics Event: ${eventName}`, data);
+            
+            // Here you would send data to your analytics service
+            // Example: gtag('event', eventName, data);
+        }
+
+        // Track page interactions
+        window.addEventListener('load', () => {
+            trackEvent('page_view', {
+                page: window.location.pathname,
+                title: document.title
+            });
+        });
+
+        // Track scroll depth
+        let maxScrollDepth = 0;
+        window.addEventListener('scroll', () => {
+            const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            
+            if (scrollDepth > maxScrollDepth) {
+                maxScrollDepth = scrollDepth;
+                
+                if (maxScrollDepth === 25 || maxScrollDepth === 50 || maxScrollDepth === 75 || maxScrollDepth === 100) {
+                    trackEvent('scroll_depth', {
+                        depth: maxScrollDepth
+                    });
+                }
+            }
+        });
+
+        // PWA installation prompt
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button
+            const installButton = document.createElement('button');
+            installButton.textContent = 'Install App';
+            installButton.style.cssText = `
+                position: fixed;
+                bottom: 80px;
+                right: 20px;
+                background: var(--gradient-red);
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 25px;
+                cursor: pointer;
+                z-index: 1000;
+                font-weight: 600;
+                box-shadow: var(--shadow);
+                transition: all 0.3s ease;
+            `;
+            
+            installButton.addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    trackEvent('pwa_install_prompt', {
+                        outcome: choiceResult.outcome
+                    });
+                    deferredPrompt = null;
+                    installButton.remove();
+                });
+            });
+            
+            installButton.addEventListener('mouseenter', () => {
+                installButton.style.transform = 'scale(1.05)';
+            });
+            
+            installButton.addEventListener('mouseleave', () => {
+                installButton.style.transform = 'scale(1)';
+            });
+            
+            document.body.appendChild(installButton);
+        });
+
+        // Accessibility improvements
+        function initializeAccessibility() {
+            // Skip to main content link
+            const skipLink = document.createElement('a');
+            skipLink.href = '#home';
+            skipLink.textContent = 'Skip to main content';
+            skipLink.style.cssText = `
+                position: absolute;
+                top: -40px;
+                left: 6px;
+                background: var(--primary-red);
+                color: white;
+                padding: 8px;
+                border-radius: 4px;
+                text-decoration: none;
+                z-index: 10000;
+                transition: top 0.3s ease;
+            `;
+            
+            skipLink.addEventListener('focus', () => {
+                skipLink.style.top = '6px';
+            });
+            
+            skipLink.addEventListener('blur', () => {
+                skipLink.style.top = '-40px';
+            });
+            
+            document.body.insertBefore(skipLink, document.body.firstChild);
+            
+            // Keyboard navigation indicators
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    document.body.classList.add('keyboard-navigation');
+                }
+            });
+            
+            document.addEventListener('mousedown', () => {
+                document.body.classList.remove('keyboard-navigation');
+            });
+            
+            // Add focus styles for keyboard navigation
+            const focusStyles = document.createElement('style');
+            focusStyles.textContent = `
+                .keyboard-navigation *:focus {
+                    outline: 2px solid var(--primary-red) !important;
+                    outline-offset: 2px !important;
+                }
+            `;
+            document.head.appendChild(focusStyles);
+        }
+
+        // Initialize accessibility features
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeAccessibility();
+        });
+
+        // Console art and developer message
+        console.log(`
+        ██╗ █████╗ ███╗   ██╗     ██████╗ █████╗ ██████╗ ████████╗███████╗██████╗ 
+        ██║██╔══██╗████╗  ██║    ██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
+        ██║███████║██╔██╗ ██║    ██║     ███████║██████╔╝   ██║   █████╗  ██████╔╝
+        ██║██╔══██║██║╚██╗██║    ██║     ██╔══██║██╔══██╗   ██║   ██╔══╝  ██╔══██╗
+        ██║██║  ██║██║ ╚████║    ╚██████╗██║  ██║██║  ██║   ██║   ███████╗██║  ██║
+        ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝     ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+        
+        🚀 Welcome to Ian Carter Kulani's Portfolio!
+        
+        Hey there, fellow developer! 👋
+        
+        Thanks for checking out my code. If you're interested in collaborating
+        or have any questions about the implementation, feel free to reach out!
+        
+        Built with ❤️ using vanilla HTML, CSS, and JavaScript
+        Features: Responsive design, CSS animations, interactive elements,
+        PWA support, accessibility features, and much more!
+        
+        💡 Try the Konami Code for a surprise! ⬆⬆⬇⬇⬅➡⬅➡BA
+        
+        Connect with me:
+        📧 iancarterkulani@gmail.com
+        🐱 https://github.com/Iankulani
+        💼 https://www.linkedin.com/in/ian-carter-kulani-913679255/
+        `);
+    </script>
+</body>
+</html>
+            
